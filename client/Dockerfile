@@ -14,8 +14,10 @@ RUN npm install
 # Copy the rest of the application code to the container's /app directory
 COPY . .
 
+# RUN ls -al
+
 # Set the environment variable to use the application's proxy
-ENV http_proxy http://localhost:5000
+# ENV http_proxy http://localhost:5000
 
 # Expose the container's port (if applicable)
 EXPOSE 3000

@@ -42,7 +42,7 @@ This docker-compose file sets up three services:
 
 ## How to Run
 
-### without doceker compose
+### without docker compose
 
 - run client container using the command below
   `docker run -p 3000:3000 rkepha/yolo-client:1.0.1-buster`

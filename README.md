@@ -58,7 +58,7 @@ This docker-compose file sets up three services:
 
   `sudo systemctl start mongod`
 
-### with doceker compose
+### with docker-compose.yml
 
 1. Install Docker on your machine.
 2. Open a terminal window and navigate to the directory containing the docker-compose.yml file.

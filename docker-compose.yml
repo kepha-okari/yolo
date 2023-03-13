@@ -1,3 +1,53 @@
+# version: '3'
+
+# services:
+
+#   backend:
+#     image: rkepha/yolo-backend:1.0.0
+#     depends_on:
+#       - mongodb
+#     ports:
+#       - "5000:5000"
+#     environment:
+#       - MONGODB_URI=mongodb://mongodb:27017/yolomy
+#     command: npm run start
+#     healthcheck:
+#       test: ["CMD", "curl", "-f", "http://localhost:5000/healthcheck"]
+#       interval: 30s
+#       timeout: 10s
+#       retries: 3
+
+#   client:
+#     image: rkepha/yolo-client:1.0.1-buster
+#     depends_on:
+#       - mongodb
+#     environment:
+#       - MONGODB_URI=mongodb://mongodb:27017/yolomy
+#     ports:
+#       - "3000:3000"
+#     command: npm start
+#     healthcheck:
+#       test: ["CMD", "curl", "-f", "http://localhost:3000"]
+#       interval: 30s
+#       timeout: 10s
+#       retries: 3
+
+#   mongodb:
+#     image: mongo
+#     ports:
+#       - "27017:27017"
+#     volumes:
+#       - mongodb_data:/data/db
+#     healthcheck:
+#       test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+#       interval: 30s
+#       timeout: 10s
+#       retries: 3
+
+# volumes:
+#   mongodb_data:
+
+
 version: '3'
 
 services:
@@ -16,9 +66,11 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+    networks:
+      - yolonet
 
   client:
-    image: rkepha/yolo-client:1.0.0
+    image: rkepha/yolo-client:1.0.1-buster
     depends_on:
       - mongodb
     environment:
@@ -31,6 +83,8 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+    networks:
+      - yolonet
 
   mongodb:
     image: mongo
@@ -43,6 +97,8 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+    networks:
+      - yolonet
 
-volumes:
-  mongodb_data:
+networks:
+  yolonet:

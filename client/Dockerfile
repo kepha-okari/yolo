@@ -1,26 +1,20 @@
+# Use the official Node.js 16.17.0-bullseye-slim image as the base image
+FROM node:16.17.0-bullseye-slim
 
-# Use an official Node.js runtime as a parent image
-FROM node:13.12.0
+# Set the working directory to /client
+WORKDIR /client
 
-# Set the working directory to /app
-WORKDIR /app
+# Copy the package.json file to the working directory
+COPY package.json package.json
 
-# Copy package.json and package-lock.json to the container's /app directory
-COPY package*.json ./
-
-# Install any needed packages specified in package.json
+# Run npm install to install dependencies
 RUN npm install
 
-# Copy the rest of the application code to the container's /app directory
+# Copy the remaining application files to the working directory
 COPY . .
 
-# RUN ls -al
-
-# Set the environment variable to use the application's proxy
-# ENV http_proxy http://localhost:5000
-
-# Expose the container's port (if applicable)
+# Expose port 3000 for the container
 EXPOSE 3000
 
-# Define the command to run the application when the container starts
-CMD [ "npm", "start" ]
+# Set the default command to kill all port 3000 services and fire up the app when the container starts
+CMD kill $(lsof -t -i :3000) || true && npm start

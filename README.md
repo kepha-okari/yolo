@@ -49,12 +49,16 @@ This docker-compose file sets up three services:
 
 - run backed container using the command below
   `docker run -p 5000:5000 rkepha/yolo-backend:1.0.1-buster`
-- install and start mongodb
+
+- install mongodb (for ubuntu distro)
+
   `wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | sudo apt-key add -`
 
   `echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list`
 
   `sudo apt-get update && sudo apt-get install -y mongodb-org`
+
+- start mongodb
 
   `sudo systemctl start mongod`
 
@@ -65,3 +69,20 @@ This docker-compose file sets up three services:
 3. Run the following command to start the services:
 
    `docker-compose up`
+
+### Using docker swarm
+
+1. inititiale docker swarm `sudo docker swarm init`
+
+2. run this command to deploy the docker-compose file
+   `sudo docker stack deploy --compose-file docker-compose.yml yolo`
+3. Now that the services are running, check the status using
+   `sudo docker stack services yolo`
+
+#### inpect logs of each service
+
+- step one: list the containers holding the services `sudo docker ps`
+
+- step two: interract with specific container `docker exec -it <backend_container_id> ls`
+  OR
+  `docker logs <mongodb_container_id>`

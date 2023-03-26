@@ -1,0 +1,51 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Install Git
+      apt:
+        name: git
+        state: present
+
+    - name: Clone the project from GitHub
+      git:
+        repo: https://github.com/kepha-okari/yolo.git
+        dest: /home/vagrant/yolo
+
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Install Docker Compose
+      apt:
+        name: docker-compose
+        state: present
+
+    - name: Build and start the client container
+      docker_compose:
+        project_src: /home/vagrant/yolo
+        project_name: yolo
+        build: true
+        rebuild: true
+        pull: true
+        state: started
+        files:
+          - docker-compose.yml
+        service_names:
+          - client
+        image: rkepha/yolo-client:1.0.1-buster
+
+    - name: Build and start the backend container
+      docker_compose:
+        project_src: /home/vagrant/yolo
+        project_name: yolo
+        build: true
+        rebuild: true
+        pull: true
+        state: started
+        files:
+          - docker-compose.yml
+        service_names:
+          - backend
+        image: rkepha/yolo-backend:1.0.1-buster

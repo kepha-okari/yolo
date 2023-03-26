@@ -12,6 +12,10 @@
         repo: https://github.com/kepha-okari/yolo.git
         dest: /home/vagrant/yolo
 
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
     - name: Install Docker
       apt:
         name: docker.io
@@ -22,30 +26,62 @@
         name: docker-compose
         state: present
 
+    # - name: Build and start the client container
+    #   docker_compose:
+    #     project_src: /home/vagrant/yolo
+    #     project_name: yolo
+    #     build: true
+    #     rebuild: true
+    #     pull: true
+    #     state: absent
+    #     files:
+    #       - docker-compose.yml
+    #     service_names:
+    #       - client
+    #     image: rkepha/yolo-client:1.0.1-buster
+    # - name: Build and start the backend container
+    #   docker_compose:
+    #     project_src: /home/vagrant/yolo
+    #     project_name: yolo
+    #     build: true
+    #     rebuild: true
+    #     pull: true
+    #     state: absent
+    #     files:
+    #       - docker-compose.yml
+    #     service_names:
+    #       - backend
+    #     image: rkepha/yolo-backend:1.0.1-buster
     - name: Build and start the client container
-      docker_compose:
-        project_src: /home/vagrant/yolo
-        project_name: yolo
-        build: true
-        rebuild: true
-        pull: true
-        state: started
-        files:
-          - docker-compose.yml
-        service_names:
-          - client
-        image: rkepha/yolo-client:1.0.1-buster
+      command: docker-compose up -d
+      args:
+        chdir: /home/vagrant/yolo
+      # docker_compose:
+      # project_src: /home/vagrant/yolo
+      # project_name: yolo
+      # build: true
+      # pull: true
+      # state: present
+      # action: start
+      # files:
+      #   - docker-compose.yml
+      # services:
+      #   - name: client
+      #     image: rkepha/yolo-client:1.0.1-buster
 
     - name: Build and start the backend container
-      docker_compose:
-        project_src: /home/vagrant/yolo
-        project_name: yolo
-        build: true
-        rebuild: true
-        pull: true
-        state: started
-        files:
-          - docker-compose.yml
-        service_names:
-          - backend
-        image: rkepha/yolo-backend:1.0.1-buster
+      # docker_compose:
+      command: docker-compose up -d
+      args:
+        # chdir:
+        chdir: /home/vagrant/yolo
+        # project_name: yolo
+        # build: true
+        # pull: true
+        # state: present
+        # action: start
+        # files:
+        #   - docker-compose.yml
+        # services:
+        #   - name: backend
+        #     image: rkepha/yolo-backend:1.0.1-buster

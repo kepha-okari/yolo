@@ -1,0 +1,43 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Install Git
+      apt:
+        name: git
+        state: present
+
+    - name: Clone the project from GitHub
+      git:
+        repo: https://github.com/kepha-okari/yolo.git
+        dest: /home/vagrant/yolo
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Install Docker Compose
+      apt:
+        name: docker-compose
+        state: present
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Start containers using docker-compose
+      command: docker-compose up -d
+      args:
+        chdir: /home/vagrant/yolo
+
+    - name: Check running containers
+      command: docker-compose ps
+      args:
+        chdir: /home/vagrant/yolo

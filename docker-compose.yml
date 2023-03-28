@@ -60,8 +60,4 @@ services:
     ports:
       - '3000:3000'
     environment:
-<<<<<<< HEAD
       - REACT_APP_API_URL=http://backend:5000
-=======
-      - REACT_APP_API_URL=http://backend:5000
->>>>>>> fix

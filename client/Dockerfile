@@ -10,7 +10,8 @@ WORKDIR /client
 COPY package.json package.json
 
 # Run npm install to install dependencies
-RUN npm install
+# RUN npm install
+RUN npm install --only=production
 
 # Copy the remaining application files to the working directory
 COPY . .
@@ -19,4 +20,4 @@ COPY . .
 EXPOSE 3000
 
 # Set the default command to kill all port 3000 services and fire up the app when the container starts
-CMD kill $(lsof -t -i :3000) || true && npm start
+CMD ["npm", "start"]

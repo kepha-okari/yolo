@@ -11,7 +11,9 @@ WORKDIR ${WORKDIR}
 COPY package.json package.json
 
 # Run npm install to install dependencies
-RUN npm install
+# RUN npm install
+RUN npm install --only=production
+
 
 # Copy the remaining application files to the working directory
 COPY . ${WORKDIR}

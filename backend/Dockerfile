@@ -1,7 +1,7 @@
 # Use the official Node.js 16.17.0-bullseye-slim image as the base image
-# FROM node:16.17.0-bullseye-slim
+# FROM node:buster-slim
+FROM node:16.17.0-bullseye-slim
 
-FROM node:buster-slim
 
 # Set the working directory to /backend and set an environment variable for the working directory
 ENV WORKDIR=/backend

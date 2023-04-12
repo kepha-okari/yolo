@@ -1,75 +1,88 @@
-# apiVersion: apps/v1
+# declarative to deploy backend and its service
+# apiVersion: v1
 # kind: Deployment
 # metadata:
 #   name: yolo-backend
+#   labels:
+#     # name: yolo-backend
+#     app: server
 # spec:
 #   replicas: 3
 #   selector:
 #     matchLabels:
-#       app: yolo-backend
+#       app: server
 #   template:
 #     metadata:
 #       labels:
-#         app: yolo-backend
+#         app: server
 #     spec:
 #       containers:
-#         - name: yolo-backend
-#           image: rkepha/yolo-backend:1.0.1-buster
+#         - name: yolobackend
+#           image: orega/yolo:1.1
 #           ports:
 #             - containerPort: 5000
 #           env:
 #             - name: MONGODB_URI
-#               value: "mongodb://mongo:27017/yolomy"
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: mongo-secret
+#                   key: MONGODB_URI
+#           volumeMounts:
+#             - name: mongo-data
+#               mountPath: /data/db
+#       volumes:
+#         - name: mongo-data
+#           persistentVolumeClaim:
+#             claimName: mongo-data-claim
 # ---
+# # Service
 # apiVersion: v1
 # kind: Service
 # metadata:
-#   name: yolo-backend-service
+#   name: backend-service
 # spec:
 #   selector:
-#     app: yolo-backend
+#     app.kubernetes.io/name: server
 #   ports:
 #     - protocol: TCP
-#       port: 80
+#       port: 5000
 #       targetPort: 5000
-#   type: LoadBalancer
 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend-deployment
-  labels:
-    app: backend
+  name: yolo-backend
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: backend
+      app: yolo-backend
   template:
     metadata:
       labels:
-        app: backend
+        app: yolo-backend
     spec:
       containers:
-        - name: backend
+        - name: yolo-backend
           image: rkepha/yolo-backend:1.0.1-buster
           ports:
             - containerPort: 5000
           env:
             - name: MONGODB_URI
-              value: mongodb://mongo-service:27017/yolomy
+              value: "mongodb://mongo:27017/yolomy"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend-service
-  labels:
-    app: backend
+  name: yolo-backend-service
 spec:
   selector:
-    app: backend
+    app: yolo-backend
   ports:
-    - name: backend
-      protocol: TCP
-      port: 5000
+    - protocol: TCP
+      port: 80
       targetPort: 5000
+  type: LoadBalancer
+kubectl apply -f yolok8-backend.yml
+kubectl apply -f yolok8-client.yml
+kubectl apply -f yolok8-storage.yml
